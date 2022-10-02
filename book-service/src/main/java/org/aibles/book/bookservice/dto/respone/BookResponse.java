@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -23,7 +23,7 @@ public class BookResponse {
     private String description;
 
     @NotBlank(message = "Release at can be not null")
-    private Instant releaseAt;
+    private LocalDateTime releaseAt;
 
-    private boolean isActive;
+    private Boolean isActive;
 }

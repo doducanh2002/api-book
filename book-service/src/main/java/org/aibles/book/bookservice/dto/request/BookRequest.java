@@ -5,14 +5,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import java.time.Instant;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class BookRequest {
-
-    //        private int id;
 
     @NotBlank(message = "Name can not be null")
     private String name;
@@ -21,7 +19,6 @@ public class BookRequest {
     private String description;
 
     @NotBlank(message = "Release at can be not null")
-    private Instant releaseAt;
+    private LocalDateTime releaseAt;
 
-    private boolean isActive;
 }

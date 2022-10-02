@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
-import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -30,10 +30,14 @@ public class Book {
     private String description;
 
     @Column(name = "releaseAt")
-    private Instant releaseAt;
+    private LocalDateTime releaseAt;
 
     @Column(name = "isActive")
     private Boolean isActive;
+
+    private long timeRemainingDay;
+
+    private long timeRemainingHouse;
 
     @Override
     public boolean equals(Object o) {

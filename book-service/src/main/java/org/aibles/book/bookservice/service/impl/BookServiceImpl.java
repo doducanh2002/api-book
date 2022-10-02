@@ -2,6 +2,7 @@ package org.aibles.book.bookservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.aibles.book.bookservice.dto.request.TimeRequest;
 import org.aibles.book.bookservice.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.aibles.book.bookservice.converter.MappingHelper;
@@ -11,8 +12,8 @@ import org.aibles.book.bookservice.model.Book;
 import org.aibles.book.bookservice.repository.BookRepository;
 import org.aibles.book.bookservice.service.BookService;
 
-import java.time.Clock;
-import java.time.Instant;
+import java.time.Duration;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -27,7 +28,6 @@ public class BookServiceImpl implements BookService {
     public BookResponse createBook(BookRequest bookRequest) {
         log.info("(create)bookCreate: {}", bookRequest);
         Book book = mappingHelper.map(bookRequest, Book.class);
-        book.setReleaseAt(Instant.now(Clock.systemDefaultZone()));
         return mappingHelper.map(bookRepository.save(book), BookResponse.class);
     }
 
@@ -61,10 +61,21 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookResponse getBookById(int bookId) {
+    public BookResponse getBookById(int bookId,TimeRequest timeRequest) {
         return bookRepository.findById(bookId)
                 .map(book -> {
-                    return mappingHelper.map(book, BookResponse.class);
+                    LocalDateTime nowTime = LocalDateTime.now();
+                    book.setTimeRemainingDay(Duration.between(timeRequest.getReleaseAt(), nowTime).toDays());
+                    book.setTimeRemainingHouse(Duration.between(timeRequest.getReleaseAt(), nowTime).toHours());
+                    if (timeRequest.getTimeRemainingDay() < 0 && timeRequest.getTimeRemainingHouse() < 0 ) {
+                        book.setIsActive(true);
+                        log.info("(get) getBook : " +bookId +" ,Is active"+ timeRequest.getIsActive());
+                    }
+                    else {
+                        book.setIsActive(false);
+                    }
+
+                    return mappingHelper.map(bookRepository.save(book), BookResponse.class);
                 })
                 .orElseThrow(NotFoundException::new);
     }
