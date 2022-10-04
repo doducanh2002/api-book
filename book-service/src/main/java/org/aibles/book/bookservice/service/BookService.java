@@ -1,7 +1,6 @@
 package org.aibles.book.bookservice.service;
 
 import org.aibles.book.bookservice.dto.request.BookRequest;
-import org.aibles.book.bookservice.dto.request.TimeRequest;
 import org.aibles.book.bookservice.dto.respone.BookResponse;
 import org.aibles.book.bookservice.model.Book;
 
@@ -47,5 +46,5 @@ public interface BookService {
      * @return - information of books
      */
 
-    BookResponse getBookById(int bookId, TimeRequest timeRequest);
+    BookResponse getBookById(int bookId, BookResponse bookResponse);
 }

@@ -6,7 +6,10 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.Id;
 import javax.validation.constraints.NotBlank;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -23,7 +26,7 @@ public class BookResponse {
     private String description;
 
     @NotBlank(message = "Release at can be not null")
-    private LocalDateTime releaseAt;
+    private LocalDate releaseAt;
 
     private Boolean isActive;
 }

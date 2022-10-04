@@ -2,7 +2,6 @@ package org.aibles.book.bookservice.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.aibles.book.bookservice.dto.request.TimeRequest;
 import org.aibles.book.bookservice.exception.NotFoundException;
 import org.springframework.stereotype.Service;
 import org.aibles.book.bookservice.converter.MappingHelper;
@@ -12,8 +11,7 @@ import org.aibles.book.bookservice.model.Book;
 import org.aibles.book.bookservice.repository.BookRepository;
 import org.aibles.book.bookservice.service.BookService;
 
-import java.time.Duration;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -28,6 +26,14 @@ public class BookServiceImpl implements BookService {
     public BookResponse createBook(BookRequest bookRequest) {
         log.info("(create)bookCreate: {}", bookRequest);
         Book book = mappingHelper.map(bookRequest, Book.class);
+        LocalDate nowTime = LocalDate.now();
+        log.info("date now :" +nowTime);
+        if (nowTime.isBefore(bookRequest.getReleaseAt())== true){
+            book.setIsActive(true);
+        }
+        else {
+            book.setIsActive(false);
+        }
         return mappingHelper.map(bookRepository.save(book), BookResponse.class);
     }
 
@@ -61,20 +67,17 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookResponse getBookById(int bookId,TimeRequest timeRequest) {
+    public BookResponse getBookById(int bookId,BookResponse bookResponse) {
         return bookRepository.findById(bookId)
                 .map(book -> {
-                    LocalDateTime nowTime = LocalDateTime.now();
-                    book.setTimeRemainingDay(Duration.between(timeRequest.getReleaseAt(), nowTime).toDays());
-                    book.setTimeRemainingHouse(Duration.between(timeRequest.getReleaseAt(), nowTime).toHours());
-                    if (timeRequest.getTimeRemainingDay() < 0 && timeRequest.getTimeRemainingHouse() < 0 ) {
+                    LocalDate nowTime = LocalDate.now();
+                    log.info("date now :" +nowTime);
+                    if (nowTime.isBefore(bookResponse.getReleaseAt())== true){
                         book.setIsActive(true);
-                        log.info("(get) getBook : " +bookId +" ,Is active"+ timeRequest.getIsActive());
                     }
                     else {
                         book.setIsActive(false);
                     }
-
                     return mappingHelper.map(bookRepository.save(book), BookResponse.class);
                 })
                 .orElseThrow(NotFoundException::new);

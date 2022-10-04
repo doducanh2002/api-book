@@ -1,6 +1,5 @@
 package org.aibles.book.bookservice.controller;
 
-import org.aibles.book.bookservice.dto.request.TimeRequest;
 import org.aibles.book.bookservice.dto.respone.BookResponse;
 import org.aibles.book.bookservice.model.Book;
 import org.aibles.book.bookservice.service.BookService;
@@ -46,8 +45,8 @@ public class BookController {
 
     @GetMapping("/{id}")
     public ResponseEntity<BookResponse> getBookById(@PathVariable("id") int bookId,
-                                                    @RequestBody TimeRequest timeRequest){
-        return ResponseEntity.status(HttpStatus.OK).body(bookService.getBookById(bookId,timeRequest));
+                                                    @RequestBody BookResponse bookResponse){
+        return ResponseEntity.status(HttpStatus.OK).body(bookService.getBookById(bookId, bookResponse));
     }
 
 }

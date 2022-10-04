@@ -5,7 +5,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 
 @Data
 @NoArgsConstructor
@@ -19,6 +22,6 @@ public class BookRequest {
     private String description;
 
     @NotBlank(message = "Release at can be not null")
-    private LocalDateTime releaseAt;
+    private LocalDate releaseAt;
 
 }
