@@ -24,16 +24,11 @@ public class Book {
     @Column(name = "id")
     private int id;
 
-    @NotBlank(message = "Name can not be null")
     @Column(name = "name")
     private String name;
 
-    @NotBlank(message = "Description can not be null")
     @Column(name = "description")
     private String description;
-
-    @Column(name = "releaseAt")
-    private LocalDate releaseAt;
 
     @Column(name = "isActive")
     private Boolean isActive;

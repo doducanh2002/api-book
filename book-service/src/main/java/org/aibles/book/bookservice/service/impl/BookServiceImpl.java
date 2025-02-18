@@ -24,16 +24,20 @@ public class BookServiceImpl implements BookService {
 
     @Override
     public BookResponse createBook(BookRequest bookRequest) {
+//        if (bookRequest.getReleaseAt() != null && bookRequest.getReleaseAt().isBefore(LocalDate.now())) {
+//            throw new IllegalArgumentException("Release date cannot be in the past");
+//        }
+
         log.info("(create)bookCreate: {}", bookRequest);
         Book book = mappingHelper.map(bookRequest, Book.class);
         LocalDate nowTime = LocalDate.now();
         log.info("date now :" +nowTime);
-        if (nowTime.isBefore(bookRequest.getReleaseAt())== true){
-            book.setIsActive(true);
-        }
-        else {
-            book.setIsActive(false);
-        }
+//        if (nowTime.isBefore(bookRequest.getReleaseAt())== true){
+//            book.setIsActive(true);
+//        }
+//        else {
+//            book.setIsActive(false);
+//        }
         return mappingHelper.map(bookRepository.save(book), BookResponse.class);
     }
 
@@ -44,7 +48,7 @@ public class BookServiceImpl implements BookService {
                 .map(book -> {
                     book.setName(bookRequest.getName());
                     book.setDescription(bookRequest.getDescription());
-                    book.setReleaseAt(bookRequest.getReleaseAt());
+//                    book.setReleaseAt(bookRequest.getReleaseAt());
                     return mappingHelper.map(bookRepository.save(book), BookResponse.class);
                 })
                 .orElseThrow(NotFoundException::new);

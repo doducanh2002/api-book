@@ -14,8 +14,6 @@
             </column>
             <column name="name" type="varchar(128)"/>
             <column name="description" type="varchar(128)"/>
-            <column name="releaseAt" type="TIMESTAMP"/>
-            <column name="isActive" type="boolean"/>
         </createTable>
     </changeSet>
 
