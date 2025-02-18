@@ -1,16 +1,20 @@
 package org.aibles.book.bookservice.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.extern.slf4j.Slf4j;
+
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Base64;
 
+@Slf4j
 public class AESUtils {
     private static final String ALGORITHM = "AES/ECB/PKCS5Padding"; // Định nghĩa mode
 
     // Mã hóa dữ liệu (chuyển thành Base64)
     public static String encrypt(String data, String key) throws Exception {
+        log.info("(encrypt)data: {}, key: {}", data, key);
         SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.ENCRYPT_MODE, secretKey);
@@ -20,6 +24,7 @@ public class AESUtils {
 
     // Giải mã dữ liệu
     public static String decrypt(String encryptedData, String key) throws Exception {
+        log.info("(decrypt)encryptedData: {}, key: {}", encryptedData, key);
         SecretKeySpec secretKey = new SecretKeySpec(key.getBytes(StandardCharsets.UTF_8), "AES");
         Cipher cipher = Cipher.getInstance(ALGORITHM);
         cipher.init(Cipher.DECRYPT_MODE, secretKey);
@@ -30,6 +35,7 @@ public class AESUtils {
 
     // Giải mã và parse JSON về object
     public static <T> T decryptToObject(String encryptedData, String secretKey, Class<T> clazz) throws Exception {
+        log.info("(decryptToObject)encryptedData: {}, secretKey: {}", encryptedData, secretKey);
         String decryptedJson = decrypt(encryptedData, secretKey);
         return new ObjectMapper().readValue(decryptedJson, clazz);
     }

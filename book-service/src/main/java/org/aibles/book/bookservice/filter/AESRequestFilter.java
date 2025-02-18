@@ -18,7 +18,7 @@ public class AESRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
 
             throws ServletException, IOException {
-
+        log.info("(AESRequestFilter)request: {}, response:{}", request, response);
         if ("POST".equals(request.getMethod()) || "PUT".equals(request.getMethod())) {
             // Đọc request body gốc
 
@@ -27,12 +27,15 @@ public class AESRequestFilter extends OncePerRequestFilter {
 
             try {
                 // Giải mã request body
+                log.info("try doFilterInternal");
+
                 String decryptedBody = AESUtils.decrypt(requestBody, AES_KEY);
                 // Gửi request với dữ liệu đã giải mã
                 HttpServletRequest wrappedRequest = new WrappedHttpServletRequest(request, decryptedBody);
                 filterChain.doFilter(wrappedRequest, response);
                 return;
             } catch (Exception e) {
+                log.info("catch doFilterInternal");
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "Invalid encrypted request body");
                 return;
             }
